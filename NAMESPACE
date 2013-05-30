@@ -1,0 +1,168 @@
+
+import(
+  XML, 
+  R.utils, 
+  rjson, 
+  RMySQL, 
+  stringr, 
+  yaml, 
+  boot, 
+  foreach, 
+  data.table,
+  glmnet,
+  ggplot2)
+# use importFrom to avoid conflict with reset
+importFrom(RCurl, postForm, curlOptions, getCurlHandle)
+
+export(
+  BinaryCut,
+  CausataData,
+  CausataVariable,
+  CausataToRNames,
+  CleanNaFromContinuous,
+  CleanNaFromFactor,
+  Discretize,
+  GetVariable, 
+  GrepLoop, 
+  MergeLevels,
+  PredictivePower,
+  PredictivePowerCv,
+  ReadCausataCsv, 
+  ReadCausataR, 
+  ReplaceOutliers,
+  RToCausataNames,
+  SampleStratified,
+  UploadModel,
+  UploadModelWithValidation, 
+  VariableDefinition,
+
+# BinaryPredictor.R
+  BinaryPredictor,
+  
+# Woe.R
+  Woe,
+  
+# VariableList.R
+  Vinclude,
+  Vexclude,
+  Vtime,
+  
+# GetStratifiedSample.R
+  GetStratifiedSample, 
+  
+# CausataData
+  "GetTransforms",
+  "GetQuery",
+  "ToPmml",
+
+# Query.R
+  "Query",
+  "is.Query",
+  "Ops.Query",
+  "Limit",
+  "Limit<-",
+  "Variables",
+  "Variables<-",
+  "as.character.Query",
+
+# FocalpointQuery.R
+  "FocalPointQuery",
+  "is.FocalPointQuery",
+  "Ops.FocalPointQuery",
+  "as.character.FocalPointQuery",
+  "WithEvents",
+
+# QueryFunctions.R
+  "WithVariables",
+  "Where",
+  "EqualTo",
+  "NotEqualTo",
+  "GreaterThan",
+  "GreaterThanOrEqualTo",
+  "LessThan",
+  "LessThanOrEqualTo",
+  "Like",
+  "BeginningWith",
+  "BacktickCollapse",
+#"Between",
+  "In",
+
+# Connect.R
+  "Connect",
+  "is.Connect",
+  "LoadCausataConfig",
+  "GetRawData",
+  "GetData",
+  "GetCausataData",
+  "Close",
+  "GetNames",
+
+# Config.R
+  "CausataConfig",
+  "Config.CreatePrimaryVariable",
+  "Config.DeleteVariable",
+  "is.CausataConfig",
+  "VariableDefinition",
+  "is.VariableDefinition",
+   "ModelDefinition",
+  "GetQuery.ModelDefinition",
+  "predict.GlmnetModelDefinition",
+  "is.ModelDefinition",
+  "UploadModel",
+  "UploadModelWithValidation"
+)
+
+S3method(CleanNaFromContinuous, CausataData)
+S3method(CleanNaFromContinuous, numeric)
+S3method(CleanNaFromContinuous, POSIXct)
+S3method(CleanNaFromFactor, CausataData)
+S3method(CleanNaFromFactor, factor)
+S3method(Discretize, CausataData)
+S3method(GetVariable, CausataData)
+S3method(MergeLevels, CausataData)
+S3method(MergeLevels, factor)
+S3method(PredictivePower, factor)
+S3method(PredictivePower, numeric)
+S3method(ReplaceOutliers, CausataData)
+S3method(ReplaceOutliers, numeric)
+S3method(GetTransforms, CausataData)
+S3method(GetQuery, CausataData)
+S3method(Woe, factor)
+
+S3method("ToPmml", GlmnetModelDefinition)
+S3method("predict", GlmnetModelDefinition)
+S3method("GetQuery", ModelDefinition)
+S3method("ModelDefinition", cv.glmnet)
+S3method("predict", GlmnetModelDefinition)
+
+S3method("Variables", Query)
+S3method("Variables<-", Query)
+S3method("Limit", Query)
+S3method("Limit", numeric)
+S3method("Limit<-", Query)
+S3method("Ops", Query)
+S3method("as.character", Query)
+
+S3method("Variables", FocalPointQuery)
+S3method("Variables<-", FocalPointQuery)
+S3method("Limit", FocalPointQuery)
+S3method("Limit<-", FocalPointQuery)
+S3method("Ops", FocalPointQuery)
+S3method("as.character", FocalPointQuery)
+
+S3method("GetRawData", Connect)
+S3method("GetData", Connect)
+S3method("GetCausataData", Connect)
+S3method("GetMetadata", Connect)
+S3method("Close", Connect)
+S3method("Vinclude", Connect)
+S3method("Vexclude", Connect)
+S3method("Vtime", Connect)
+S3method("GetNames", Connect)
+
+S3method("BinaryPredictor", default)
+S3method("BinaryPredictor", factor)
+S3method("BinaryPredictor", numeric)
+S3method("BinaryPredictor", data.frame)
+S3method("print", BinaryPredictorList)
+S3method("plot", BinaryPredictor)

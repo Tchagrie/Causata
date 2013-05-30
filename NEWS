@@ -1,0 +1,19 @@
+
+This file summarizes changes to the Causata package.
+
+Version 3.0-0
+------------------------------------------------------------------------------
+* Initial release.
+
+Version 3.0-1
+------------------------------------------------------------------------------
+* Fixed issue with default protocol for CausataConfig.
+* Created distinct username / password arguments for Connect and CausataConfig.
+
+Version 4.1-0
+------------------------------------------------------------------------------
+* Dramatically reduced memory usage and increased speed in GetData using data.table
+* Added more tests for replaying transformations
+* Added more tests for discretization
+* Fixed bug with discretization of integer values
+* Discretization now requires outlier replacement first

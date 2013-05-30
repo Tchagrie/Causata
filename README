@@ -1,0 +1,16 @@
+
+In the directory containing this folder, do:
+
+R CMD build causata
+R CMD check causata
+R CMD INSTALL causata_XXX.tar.gz 
+
+To generate PDF documentation:
+
+R CMD Rd2pdf Causata
+
+===============================================================================
+To do list:
+
+* Modify Config.CreatePrimaryVariable to use an object from VariableDefinition 
+instead of specifying arguments directly in the function call.

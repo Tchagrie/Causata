@@ -13,7 +13,10 @@ VariableDefinition(name, display.name = name, description = name,
   labels = list(), 
   author = Sys.info()[["user"]], 
   timestamp = as.integer(1000 * as.numeric(format(Sys.time(), "\%H\%M\%OS3"))), 
-  archived = FALSE)
+  archived = FALSE, 
+  categorizing.attribute = "", 
+  output.value.count = -1,
+  data.type = "double")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,8 +39,10 @@ The variable author name.
 The timestamp for when the variable was created.  The format is milliseconds from the Unix epoch, Jan 1 1970, 00:00 UTC.
 }
   \item{archived}{
-A boolean indicating if this variable is archived or not.
-}
+A boolean indicating if this variable is archived or not.}
+  \item{categorizing.attribute}{Name of the Causata attribute used to categorize the output.}
+  \item{output.value.count}{The number of output values.}
+  \item{data.type}{The data type of the output.  Allowable values are "double", "float", "long", "integer", or "short".}
 }
 \details{
 Consult your Causata documentation for more information about variables in Causata.

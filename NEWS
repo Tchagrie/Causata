@@ -17,3 +17,11 @@ Version 4.1-0
 * Added more tests for discretization
 * Fixed bug with discretization of integer values
 * Discretization now requires outlier replacement first
+
+Version 4.2-0
+------------------------------------------------------------------------------
+* Added function ShortenStrings for printing variables with long names in BinaryPredictor.
+* The predict.GlmnetModelDefinition function now returns a list of missing columns.
+* Fixed bug in PMML generation for factor levels with period in the level name.
+* Fixed bug in vignette that caused a knitr error.
+* Added tests for PMML generation.

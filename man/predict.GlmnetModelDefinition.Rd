@@ -26,6 +26,7 @@ A list is returned with elements as follows:
 \item{model.matrix }{The model matrix used to calculate predicted values.}
 \item{predicted }{Predicted values.}
 \item{lambda }{The lambda value used by \code{glmnet}.}
+\item{missing.cols }{Column names that are missing from the prediction matrix.}
 }
 \author{Justin Hemann <support@causata.com>}
 

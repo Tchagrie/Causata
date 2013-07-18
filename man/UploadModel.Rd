@@ -30,11 +30,21 @@ UploadModelWithValidation(causata.config, model.definition, variable.definition,
 \details{
 \code{UploadModel} translates a model into PMML and uploads it to Causata, where it will become available as a new variable.
 
-\code{UploadModelWithValidation} adds validation to the upload process.  The model is uploaded, then a new query is 
-executed using the provided \code{query.function}.  The new query will include the variables originally
-used to train the model, and the new model variable from Causata.  The R scoring process is re-applied to the new data, and 
-the results from R and Causata are compared.  The validation is deemed successful if the difference in results is below
+\code{UploadModelWithValidation} adds validation to the upload process.  The process works as follows:
+
+\enumerate{
+\item The model is uploaded to a random variable name.
+\item A new query is executed using the provided \code{query.function}.  
+The new query will include the variables originally
+used to train the model, and the new model variable from Causata.  
+The R scoring process is re-applied to the new data, and 
+the results from R and Causata are compared.  
+The validation is deemed successful if the difference in results is below
 the value provided in \code{record.error.max}.
+
+If the validation was successful then the model is re-uploaded using the variable name provided
+in \code{model.definition}.  If the validation failed then 
+}
 
 There are two important requirements for the query function:
 \enumerate{

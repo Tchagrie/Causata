@@ -69,8 +69,8 @@ ToPmml.GlmnetModelDefinition <- function(model.definition, variable.definition, 
         left.term <- crossTerms[[name]][[1]]
         right.term <- crossTerms[[name]][[2]]
         
-        left.name <- GetVariable(causataData, left.term)$causata.name
-        right.name <- GetVariable(causataData, right.term)$causata.name # TODO switch to use crossTerms[[name]]
+        left.name <- RVariableToCausata(GetVariable(causataData, left.term)$causata.name)
+        right.name <- RVariableToCausata(GetVariable(causataData, right.term)$causata.name) # TODO switch to use crossTerms[[name]]
         
         newXMLNode("FieldRef", parent=predictorTerm, attrs=(c(field=left.name)))
         newXMLNode("FieldRef", parent=predictorTerm, attrs=(c(field=right.name)))
@@ -78,9 +78,9 @@ ToPmml.GlmnetModelDefinition <- function(model.definition, variable.definition, 
       } else {
         # not a cross term
         numericPredictor <- newXMLNode("NumericPredictor", parent=regressionTable)
-        xmlAttrs(numericPredictor)["name"] = RToCausataNames(name)
+        xmlAttrs(numericPredictor)["name"] = RVariableToCausata(name)
         xmlAttrs(numericPredictor)["coefficient"] = non.zero.coefs[[name]];
-        if (verbose) cat("\n    Writing linear term", RToCausataNames(name))
+        if (verbose) cat("\n    Writing linear term", RVariableToCausata(name))
       }
 
       # We are looping over coefficients
@@ -98,11 +98,8 @@ ToPmml.GlmnetModelDefinition <- function(model.definition, variable.definition, 
       } else {
         insertDataDictionaryFieldForContinuous(variable, pmml)
         insertMiningFieldForContinuous(variable, pmml)
-        if ('BinContinuousP' %in% variable$steps) {
-          insertDiscretizedTransformation(variable, pmml, causataData, "BinContinuousP")
-        }
-        if ('BinWoeP' %in% variable$steps) {
-          insertDiscretizedTransformation(variable, pmml, causataData, "BinWoeP")
+        if ('Discretize' %in% variable$steps) {
+          insertDiscretizedTransformation(variable, pmml, causataData, "Discretize")
         }
       }
 
@@ -264,14 +261,11 @@ insertDiscretizedTransformation <- function(variable, pmml, causataData, stepnam
   binLimits <- variable$binLimits
   
   # set bin values according to the step name
-  if (stepname == "BinContinuousP") { 
-    # monotone binning
-    binValues <- seq(1, length(binLimits) - 1);
-  } else if (stepname == "BinWoeP") {
-    # weight of evidence binning
+  if (stepname == "Discretize") {
+    # Bins are mapped to discrete values
     binValues <- variable$binValues
   } else {
-    stop("Invalid step specified in GlmnetToPMML")
+    stop("Invalid step specified in GlmnetToPMML:", stepname)
   }
   # create an index of bins
   binIndex <- seq(1, length(binLimits) - 1)
@@ -287,7 +281,6 @@ insertDiscretizedTransformation <- function(variable, pmml, causataData, stepnam
       xmlAttrs(interval)["rightMargin"] = binLimits[i.bin + 1]
     }
   }
-  
   lapply(binIndex, insert)
 }
 
@@ -343,4 +336,10 @@ insertHeaderExtension <- function(name, value, header) {
     xmlAttrs(extension)["name"] = name
     xmlAttrs(extension)["value"] = value
   }
+}
+
+RVariableToCausata <- function(vname){
+  # Replaces the first double underscore in a string __ with a dollar sign $
+  # Used to match variable names in coefficient table with names in other parts of XML
+  return(sub('__', '\\$', vname))
 }

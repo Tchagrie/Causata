@@ -15,7 +15,7 @@ opts_chunk$set(fig.width=6.5, fig.height=4.5, size="small", tidy=FALSE)
 
 \title{Building and deploying a model with the Causata R package}
 \author{Justin Hemann, www.causata.com}
-\date{Version 4.1-0, May 30, 2013}
+\date{Version 4.2-0, July 18, 2013}
 
 \maketitle
 This vignette shows how functions in the Causata R package are used to build a logistic regression model in R and deploy it to Causata.
@@ -46,12 +46,12 @@ library(glmnet)
 # A page view event is selected as a focal point.
 conn <- Connect(group='fsdemo')
 query <- paste(
-  'SELECT mortgage_application_approved__n7d, total_assets__AP,'
+  'SELECT mortgage_application_approved__n7d, total_assets__AP,',
   'web_has_browsed_on_ipad__l7d',
   'FROM Scenarios S, page_view P',
   'WHERE where S.profile_id = P.profile_id',
-  'AND S.focal_point = P.timestamp'
-  'LIMIT 20000'
+  'AND S.focal_point = P.timestamp',
+  'LIMIT 20000')
 df <- GetData(conn, query)
 @
   
@@ -79,7 +79,7 @@ cv.glmnet.obj <- cv.glmnet(modelmatrix,
 
 Last, the model is assigned a variable name and label, and the model is uploaded to Causata.
 
- <<eval=FALSE>>= 
+<<eval=FALSE>>= 
 # upload model
 model.def <- ModelDefinition(
   cv.glmnet.obj, causataData, formula(formula.str), 

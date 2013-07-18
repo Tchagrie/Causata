@@ -2,7 +2,7 @@
 
 # the call to globalVariables removes 'Note' messages during R CMD CHECK about global variables in 
 # columns used for ggplot
-globalVariables(c('bin.names','prob','bin.width','x','bin.count','iv'))
+globalVariables(c('bin.names','bin.names.short','prob','bin.width','x','bin.count','iv'))
 
 #
 # public functions
@@ -133,7 +133,7 @@ BinaryPredictor.data.frame <- function(iv, dv, min.power=0.01, min.robustness=0.
 
 plot.BinaryPredictor <- function(x, y=NULL, type="bin", plot.missing=TRUE, ...){
   if (x$class == "factor"){
-    p <- PlotFactor(x)
+    p <- PlotFactor(x, ...)
   } else if ((x$class %in% c("numeric","integer")) & (type == "glm")){
     p <- PlotNumericGlm(x, plot.missing)
   } else if ((x$class %in% c("numeric","integer")) & (type == "bin")){
@@ -290,7 +290,7 @@ PlotData <- function(obj){
 }
 
 
-PlotFactor <- function(obj){
+PlotFactor <- function(obj, ...){
   # get a data frame representing bins
   df <- PlotData(obj)
   # plot a factor variable
@@ -299,7 +299,8 @@ PlotFactor <- function(obj){
     "  Robustness: ", format(obj$predictivePower$robustness, digits=3), "\n", 
     "  Bin count min: ", min(df$bin.count), 
     "  max: ", max(df$bin.count), sep="")
-  p <- ggplot(df, aes(x=bin.names, y=prob, width=bin.width)) + geom_bar(stat="identity", position="identity")
+  df$bin.names.short <- ShortenStrings(df$bin.names, ...)
+  p <- ggplot(df, aes(x=bin.names.short, y=prob, width=bin.width)) + geom_bar(stat="identity", position="identity")
   p <- p + coord_flip()
   p <- p + ylab("Probability dependent variable is true") + xlab(paste("Bins of", obj$name))
   p <- p + labs(title=titleStr)

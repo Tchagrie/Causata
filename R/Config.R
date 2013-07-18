@@ -29,7 +29,7 @@ GetModelUploadUrl <- function(this) {
 }
 
 ##########################################################################################
-# VariableDefini
+# VariableDefinition
 ##########################################################################################
 VariableDefinition <- function(
   name,
@@ -38,7 +38,15 @@ VariableDefinition <- function(
   labels=list(),
   author=Sys.info()[["user"]],
   timestamp=as.integer(1000*as.numeric(format(Sys.time(),"%H%M%OS3"))),
-  archived=FALSE) {
+  archived=FALSE,
+  categorizing.attribute="",
+  output.value.count=-1,
+  data.type="double") {
+
+  if (nchar(categorizing.attribute) > 0 && output.value.count < 1) {
+    warning("Cannot create a categorized variable with non-positive output value count")
+    return(NULL)
+  }
   
   this <- list(
     name=name,
@@ -47,11 +55,22 @@ VariableDefinition <- function(
     labels=labels,
     author=author,
     timestamp=timestamp,
-    archived=archived)
+    archived=archived,
+    categorizing.attribute=categorizing.attribute,
+    output.value.count=output.value.count,
+    data.type=data.type)
   class(this) <- "VariableDefinition"
   this
 }
 is.VariableDefinition <- function(this) inherits(this, "VariableDefinition")
+
+is.numeric.VariableDefinition <- function(this) {
+  this$data.type == "double"  ||
+  this$data.type == "float"   ||
+  this$data.type == "long"    ||
+  this$data.type == "integer" ||
+  this$data.type == "short"
+}
 
 ##########################################################################################
 # ModelDefinition
@@ -86,7 +105,18 @@ GetQuery.ModelDefinition <- function(this, ...) {
 
 predict.GlmnetModelDefinition <- function(object, data, verbose=FALSE, ...) {
   if (verbose) cat("\nGenerating glmnet prediction, lambda =", object$lambda, "\n")
-  mm <- model.matrix(object$formula, data=data)
+  missing.cols <- c() # default value for missing columns
+  
+  # remove columns from the data frame that are not used in the formula
+  if (verbose) cat('Columns in input data:', ncol(data), '\n')
+  data <- data[, names(data) %in% all.vars(object$formula)]
+  if (verbose) cat('Columns in input data after removing unused:', ncol(data), '\n')
+  
+  # set contrasts in data to use all levels in each provided factor
+  # don't use the default behavior that omits the first factor level
+  mm <- model.matrix(object$formula, data=data, 
+    contrasts.arg=lapply(data[, sapply(data, is.factor)], contrasts, contrasts=FALSE) )
+  
   if (nrow(mm) != nrow(data)){
     warning("Rows in matrix do not match rows in data, probably caused by missing values in data.")
   }
@@ -122,7 +152,8 @@ predict.GlmnetModelDefinition <- function(object, data, verbose=FALSE, ...) {
   return(list(
     model.matrix = mm,
     predicted = as.numeric(predicted),
-    lambda = object$lambda))
+    lambda = object$lambda,
+    missing.cols = missing.cols))
 }
 
 

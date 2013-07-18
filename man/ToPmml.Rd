@@ -18,7 +18,12 @@
 The PMML text string can be written to a file using the \code{\link{saveXML}} function from the XML package.
 }
 \value{
-Returns a string of PMML text.
+Returns an object with classes from the \code{XML} package. 
+The classes are \code{XMLInternalElementNode}, \code{XMLInternalNode},
+and \code{XMLAbstractNode}.
+
+Use \code{print} with this object to return a string of PMML text, and \code{\link{saveXML}}
+to write the PMML to a file.
 }
 
 \author{

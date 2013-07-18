@@ -25,6 +25,9 @@ CausataVariable <- function(variableName, values, causata.name=variableName) {
   variableObject$binValues <- NULL # map continuous values to discrete, e.g. weight of evidence binning
   variableObject$missingReplacement <- NULL # missing values will be replaced with this
   variableObject$unmergedLevels <- NULL # levels that remained after MergeLevels
+  variableObject$categorizing.attribute <- NULL # Some input variables are categorized.
+  variableObject$category.value <- NULL # the category to use for a categorized variable.
+  variableObject$time.domain <- NULL # The variable time domain
   
   # transformation is a function that takes a vector (column) from a data.frame and applies
   # all the transformations to it that have been recorded in this CausataVariable, returning the transformed vector
@@ -516,7 +519,10 @@ ColumnarTransformation <- function(this, column.function) {
     #df[,this$name] <- column.function(df[,this$name])
     # using set from data.table as it is much more efficient with memory
     colnumber <- which(this$name == names(df))
-    stopifnot(length(colnumber)==1) # require that one column matches
+    if (length(colnumber)!=1){
+      # require that one column matches
+      stop("One column match required but found ", length(colnumber) , " for column ", this$name)
+    }
     set(df, j=colnumber, value=column.function(df[, this$name]))
     return(df)
   }

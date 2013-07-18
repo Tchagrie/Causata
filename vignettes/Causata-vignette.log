@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  3 JUN 2013 22:15
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  18 JUL 2013 06:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -172,25 +172,25 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 340.
 (./Causata-vignette.aux)
 \openout1 = `Causata-vignette.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
-LaTeX Font Info:    ... okay on input line 63.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 63.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 58.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 58.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    ... okay on input line 58.
 
 (/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -254,15 +254,15 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 69.
+(Font)              <12> on input line 64.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 69.
+(Font)              <8> on input line 64.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 69.
-Package color Info: Redefining color shadecolor on input line 91.
+(Font)              <6> on input line 64.
+Package color Info: Redefining color shadecolor on input line 86.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 93.
-LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 98.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 88.
+LaTeX Font Info:    Try loading font information for TS1+cmtt on input line 92.
 
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/base/ts1cmtt.fd
@@ -270,96 +270,98 @@ File: ts1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 ) [1
 
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 117.
-Package color Info: Redefining color shadecolor on input line 142.
+Package color Info: Redefining color shadecolor on input line 111.
+Package color Info: Redefining color shadecolor on input line 133.
  [2]
-Package color Info: Redefining color shadecolor on input line 177.
-Package color Info: Redefining color shadecolor on input line 198.
-Package color Info: Redefining color shadecolor on input line 212.
-Package color Info: Redefining color shadecolor on input line 230.
+Package color Info: Redefining color shadecolor on input line 168.
+Package color Info: Redefining color shadecolor on input line 187.
+Package color Info: Redefining color shadecolor on input line 201.
+Package color Info: Redefining color shadecolor on input line 219.
+Package color Info: Redefining color shadecolor on input line 236.
  [3]
-Package color Info: Redefining color shadecolor on input line 248.
-Package color Info: Redefining color shadecolor on input line 266.
-LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 269
+Package color Info: Redefining color shadecolor on input line 254.
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 257
 .
 
 (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
 File: omscmtt.fd 
 )
 LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 269.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 257.
+Package color Info: Redefining color shadecolor on input line 299.
 
 [4]
-Package color Info: Redefining color shadecolor on input line 311.
-Package color Info: Redefining color shadecolor on input line 330.
-Package color Info: Redefining color shadecolor on input line 358.
+Package color Info: Redefining color shadecolor on input line 318.
+Package color Info: Redefining color shadecolor on input line 346.
  [5]
-Package color Info: Redefining color shadecolor on input line 381.
-Package color Info: Redefining color shadecolor on input line 400.
- <figure/glmnet-diagnostic.pdf, id=28, 469.755pt x 325.215pt>
+Package color Info: Redefining color shadecolor on input line 369.
+Package color Info: Redefining color shadecolor on input line 388.
+ <figure/glmnet-diagnostic.pdf, id=29, 469.755pt x 325.215pt>
 File: figure/glmnet-diagnostic.pdf Graphic file (type pdf)
 
 <use figure/glmnet-diagnostic.pdf>
-Package pdftex.def Info: figure/glmnet-diagnostic.pdf used on input line 409.
+Package pdftex.def Info: figure/glmnet-diagnostic.pdf used on input line 397.
 (pdftex.def)             Requested size: 345.0pt x 238.84406pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 409--410
+Overfull \hbox (15.0pt too wide) in paragraph at lines 397--398
 [][] 
  []
 
-[6]
-Package color Info: Redefining color shadecolor on input line 417.
-Package color Info: Redefining color shadecolor on input line 439.
- [7 <./figure/glmnet-diagnostic.pdf>]
-<figure/roc-plot.pdf, id=41, 469.755pt x 325.215pt>
+Package color Info: Redefining color shadecolor on input line 405.
+[6 <./figure/glmnet-diagnostic.pdf>]
+Package color Info: Redefining color shadecolor on input line 426.
+
+<figure/roc-plot.pdf, id=38, 469.755pt x 325.215pt>
 File: figure/roc-plot.pdf Graphic file (type pdf)
  <use figure/roc-plot.pdf>
-Package pdftex.def Info: figure/roc-plot.pdf used on input line 456.
+Package pdftex.def Info: figure/roc-plot.pdf used on input line 443.
 (pdftex.def)             Requested size: 345.0pt x 238.84406pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 456--457
+Overfull \hbox (15.0pt too wide) in paragraph at lines 443--444
 [][] 
  []
 
 
-Overfull \hbox (42.4455pt too wide) in paragraph at lines 464--464
+Overfull \hbox (42.4455pt too wide) in paragraph at lines 451--451
 []\OT1/cmtt/m/n/9 ## Data: predicted.test in 4029 controls (y.test false) < 197
  cases (y.test true).[] 
  []
 
-Package color Info: Redefining color shadecolor on input line 473.
-[8 <./figure/roc-plot.pdf>]
-Package color Info: Redefining color shadecolor on input line 505.
+[7 <./figure/roc-plot.pdf>]
+Package color Info: Redefining color shadecolor on input line 460.
+Package color Info: Redefining color shadecolor on input line 490.
+Package color Info: Redefining color shadecolor on input line 502.
 Package color Info: Redefining color shadecolor on input line 517.
-Package color Info: Redefining color shadecolor on input line 532.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <5> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 534.
- [9] (./Causata-vignette.aux) ) 
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 519.
+ [8] [9] (./Causata-vignette.aux) ) 
 Here is how much of TeX's memory you used:
- 2148 strings out of 493488
- 32093 string characters out of 3141326
- 89346 words of memory out of 3000000
- 5424 multiletter control sequences out of 15000+200000
- 9584 words of font info for 35 fonts, out of 3000000 for 9000
+ 2147 strings out of 493488
+ 32039 string characters out of 3141326
+ 92050 words of memory out of 3000000
+ 5421 multiletter control sequences out of 15000+200000
+ 10050 words of font info for 37 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,6n,23p,251b,303s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2012/texmf-dist/fonts/enc/dv
-ips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2012/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy9.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmtt10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmtt8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmtt9.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/
-sfrm1000.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/sf
-tt0900.pfb>
-Output written on Causata-vignette.pdf (9 pages, 186813 bytes).
+ 38i,6n,23p,294b,312s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2012/texmf-dist/fonts/en
+c/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2012/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmitt10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmtt10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmtt8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmtt9.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-su
+per/sfit0900.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-supe
+r/sfrm1000.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/cm-super/
+sftt0900.pfb>
+Output written on Causata-vignette.pdf (9 pages, 210419 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 65 compressed objects within 1 object stream
+ 100 PDF objects out of 1000 (max. 8388607)
+ 71 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

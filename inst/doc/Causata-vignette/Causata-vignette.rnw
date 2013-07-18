@@ -1,0 +1,340 @@
+\documentclass{article}
+
+<<setup, include=FALSE, cache=FALSE>>=
+# Set global chunk options for knitr documentation
+opts_chunk$set(fig.width=6.5, fig.height=4.5, size="small", tidy=FALSE)
+
+# Generate R code from the sweave/knitr documentation using the purl command as shown below
+#purl(input="inst/doc/Causata-vignette.rnw", output="inst/doc/Causata-vignette.R", documentation=0)
+@
+
+\begin{document}
+
+\title{Building and deploying a model with the Causata R package}
+\author{Justin Hemann}
+\date{Version 4.1-0, May 14, 2013}
+
+\maketitle
+This vignette shows how functions in the Causata R package are used to build a logistic 
+regression model in R and deploy it to Causata.
+
+\section*{A simple example}
+
+A very simple example is shown below, illustrating a complete model build process from
+data extraction to model migration.
+Note that the code below is not entirely executable since a Causata server is 
+required to extract the data (the \texttt{GetData} and \texttt{Connect} 
+functions) and upload the model
+(the \texttt{UploadModel} function).
+
+The first step is to extract data using the Causata SQL interface. The focal
+point is set at page view events, meaning that the variables are built
+with respect to customers' page views.  The variables returned in the query are:
+
+\begin{itemize}
+  \item mortgage_application_approved__n30d is a boolean variable indicating if a mortgage application
+    is approved in the 30 days after a page view.  This is used as the dependent variable.
+  \item total_assets__AP is a numeric variable representing the total deposits for a customer over all past.
+  \item web_has_browsed_on_ipad__l7d is a boolean variable indicating if a customer has visited the 
+    website with an iPad in the 7 days before the page view.
+\end{itemize}
+
+<<eval=FALSE>>=
+library(Causata)
+
+# Load data using the SQL interface.
+# A page view event is selected as a focal point.
+conn <- Connect(group='fsdemo')
+query <- paste(
+  'SELECT mortgage_application_approved__n7d, total_assets__AP,'
+  'web_has_browsed_on_ipad__l7d',
+  'FROM Scenarios S, page_view P',
+  'WHERE where S.profile_id = P.profile_id',
+  'AND S.focal_point = P.timestamp'
+  'LIMIT 20000'
+df <- GetData(conn, query)
+@
+  
+Next a formula is constructed, missing values in the data are replaced, and a glmnet model is trained.
+The model predicts the probability of a mortgage approval in the 30 days following a 
+page view as a function of total assets and whether a customer has used an iPad.
+  
+<<eval=FALSE>>=
+formula.str <- paste('mortgage_application_approved__n30d ~',
+  'total_assets__AP + web_has_browsed_on_ipad__AP')
+
+# Create a CausataData object to track preprocessing steps.
+causataData <- CausataData(df, 'mortgage_application_approved__n30d')
+  
+# Remove missing values.
+causataData <- CleanNaFromContinuous(causataData)
+causataData <- CleanNaFromFactor(causataData)
+
+# build a model
+modelmatrix <- model.matrix(formula(formula.str), data=causataData$df)
+cv.glmnet.obj <- cv.glmnet(modelmatrix, 
+  causataData$df$mortgage_application_approved__n30d, 
+  alpha=0.0, family='binomial')
+@  
+
+Last, the model is assigned a variable name and label, and the model is uploaded to Causata.
+
+ <<eval=FALSE>>= 
+# upload model
+model.def <- ModelDefinition(
+  cv.glmnet.obj, causataData, formula(formula.str), cv.glmnet.obj$lambda.min)
+variable.def <- VariableDefinition(
+  name='score-mortgage-application', display.name='Score: Mortgage Application', 
+  description='Logistic regression model for demo.', author='Justin',
+  labels='Scores')
+result <- UploadModel(CausataConfig(group='fsdemo'), model.def, variable.def)
+@
+
+\section*{A longer example}
+
+The next example builds on the first one, adding several steps.
+The R code shown below is all executable
+provided that the Causata R package is installed.
+
+\subsection*{Extract and load data}
+
+The first step in a model building process is to extract and load model training data.  
+In Causata the easiest way to extract data is to use the Causata-SQL interface, which requires a
+connection to a Causata server.  This section of the vignette is intended to work without a connection, so an 
+example data set from the Causata package is used instead of the SQL interface.
+The example data set includes records for individuals who were shown a mobile banner ad.
+
+First packages are loaded, along with the example data.  The data resides in a data frame \texttt{df.causata}.
+
+<<results=hide, message=FALSE>>=
+library(Causata)
+library(pROC)
+
+# Set a random seed so random numbers are repeated
+set.seed(87352)
+
+# Load example data from the Causata package
+data(df.causata)
+@
+
+Next a dependent variable is created.  This example uses binary classification, 
+so the dependent variable is 1 if a user clicks a mobile banner ad,
+and 0 otherwise.
+
+<<>>=
+# Set the dependent variable
+dvname <- "has.responded.mobile.logoff_next.hour_466"
+dv <- rep(0, nrow(df.causata))
+dv[df.causata[[dvname]] == "true"] <- 1
+
+# Remove unwanted variables from the data frame
+df.causata[[dvname]] <- NULL
+@
+
+\subsection*{Preprocessing}
+
+Now that the data is loaded into R, the next step is to preprocess the data.  Variables with no variation 
+(all zero, all missing, etc.) must be removed.  The loop shown below removes factors with a single
+level and numeric columns with a single value.
+
+<<>>=
+# Loop to remove variables with no variation
+for (col in colnames(df.causata)){
+  if (length(unique(df.causata[[col]])) == 1){
+    # Single valued variable, remove it
+    df.causata[[col]] <- NULL
+  }
+}
+@
+
+Next a \texttt{CausataData} object is created, which tracks preprocessing steps that will be
+repeated during model scoring.
+
+<<>>=
+# Create a CausataData object
+causataData <- CausataData(df.causata, dependent.variable=dv)
+@
+
+\subsubsection*{Missing values}
+
+Two functions from the Causata R package
+are used to replace missing values in factors (categorical variables) and in numeric variables. 
+The replacement values are stored in \texttt{causataData}.
+
+<<>>=
+# Replace missing values
+causataData <- CleanNaFromContinuous(causataData)
+causataData <- CleanNaFromFactor(causataData)
+@
+
+\subsubsection*{Categorical variables}
+
+Categorical variables with many levels will generate many dummy 
+variables, which can be problematic during model training.  One way to mitigate this problem
+is to merge smaller levels into an "Other" level.  In the example below, the number of 
+levels is capped at 15, and the mapping of original levels to the new levels 
+is stored in \texttt{causataData}.
+
+<<>>=
+# Merge levels in factors with # levels exceeding a threshold
+causataData <- MergeLevels(causataData, max.levels=15)
+@
+
+\subsubsection*{Outliers}
+
+The final preprocessing step illustrated here is the replacement of outliers.  In this example any variable 
+with \texttt{online.average.authentications.per.month} in the name will have values above 200 replaced with 200.
+
+<<>>=
+# Replace outliers in authentication count variables
+for (col in grep("^online.average.authentications.per.month", 
+                 names(causataData$df), value=TRUE)){
+  causataData <- ReplaceOutliers(causataData, col, upperLimit=200)
+}
+@
+
+\subsubsection*{Other preprocessing steps}
+
+Other preprocessing steps may include:
+
+\begin{itemize}
+  \item \textbf{Removing collinear variables:} Highly correlated variables can make model interpretation and 
+    variable importance calculations more difficult.  If multiple variables are correlated then
+    selecting only one for the model may be beneficial.
+  \item \textbf{Linearization and discretization:} Numeric variables with a nonlinear relationship with the log-odds of the 
+    dependent variable may benefit from a linearizing transformation, such as the Weight of Evidence (WOE)
+    transformation.  Causata supports the discretization of continuous variables where continuous values are 
+    discretized into bins and mapped to a prescribed value.
+  \item \textbf{Interaction terms:} Interaction terms are supported during scoring.  They can be added to 
+    the model formula in R and will automatically be translated into the Causata model.
+\end{itemize}
+
+\subsection*{Train a glmnet model}
+
+Next the \texttt{model.matrix} function will be used to convert the data frame into a design matrix where
+factors are encoded as dummy variables.  This step requires a model formula, which is simply the addition
+of all independent variables in the data frame.
+
+<<>>=
+# Extract a set of independent variable names
+indep.vars <- colnames(causataData$df)
+indep.vars <- indep.vars[!(indep.vars == "dependent.variable") ]
+# Build a formula string
+formula.string <- paste("dependent.variable", "~",  
+                        paste(indep.vars, collapse=" + "))
+formula.object <- formula(formula.string)
+# Build a model matrix
+x.matrix <- model.matrix(formula.object, data=causataData$df)
+@
+
+The design matrix is split into two matrices for model training and testing / validation.  Here 75\%
+of the rows are selected at random for the training data, and the remainder are used for testing.
+
+<<>>=
+# Split into training and testing data
+idx.split <- sample(1:nrow(x.matrix), round(0.75 * nrow(x.matrix)))
+x.matrix.train <- x.matrix[ idx.split, ]
+x.matrix.test  <- x.matrix[-idx.split, ]
+y.train <- causataData$df$dependent.variable[ idx.split ]
+y.test  <- causataData$df$dependent.variable[-idx.split ]
+@
+
+Next the training data is supplied to \texttt{cv.glmnet} (from the \texttt{glmnet} package), 
+which builds multiple models while varying the regularization parameter Lambda.
+The \texttt{plot} command generates a diagnostic plot of the model error (deviance) with respect to Lambda.  
+The error bars indicate the standard error across the ten-fold cross validation,
+which appears to be high with respect to the overall change in the mean deviance.  
+The standard error could
+be reduced by using a larger data set or reducing multicollinearity in the training data.
+
+<<glmnet-diagnostic>>=
+# Build model, select alpha value near 1 
+# since we expect most coefficients to be zero
+cv.glmnet.obj <- cv.glmnet(x.matrix.train, y.train, alpha=0.8, 
+                           family=c("binomial"))
+plot(cv.glmnet.obj)
+@
+
+Now the model is applied to the training and test data.  Predicted values are calculated for each data set.
+
+<<>>=
+# Use the model to predict responses for training / testing data
+predicted.train <- predict(cv.glmnet.obj, newx=x.matrix.train, 
+                           type="response", s="lambda.min")
+predicted.test  <- predict(cv.glmnet.obj, newx=x.matrix.test,  
+                           type="response", s="lambda.min")
+@
+
+The next step is to assess the model accuracy using the area under the ROC curve.  
+A value of 0.72 is considered fair, though not strong.
+Ideally the area under the ROC curve will be very close for the train / test data sets, which indicates
+a robust model that is not overfit.  In this example the areas are within 2\%.
+
+<<roc-plot>>=
+# Compute area under the ROC curve using the pROC package
+roc.train <- roc(y.train, predicted.train)
+roc.test  <- roc(y.test,  predicted.test )
+cat("Training / testing area under ROC curve: ", 
+    roc.train$auc, ", ", roc.test$auc, "\n")
+plot(roc.train, 
+     main=sprintf("ROC plot for glmnet model training data.  AUC=%6.4f", 
+     roc.train$auc))
+@
+
+In the final steps the model name and description are set, and the Causata server parameters are provided so that
+the model can be uploaded.  The final command \texttt{UploadModel} is commented since it requires a live connection
+to a Causata server.
+
+<<>>=
+# Prepare to import the model into Causata
+model.def <- ModelDefinition(
+  cv.glmnet.obj, 
+  causataData, 
+  formula.object, 
+  cv.glmnet.obj$lambda.min )
+variable.def <- VariableDefinition(
+  name = "score-test-model", 
+  display.name = "Score: Test Model",
+  description = "A logistic regression model trained with sampledata.",
+  author = "Test User" )
+
+# Generate a string of PMML representing the model and 
+# preprocessing transformations.
+# This step is not required to upload a model, 
+# it's shown for illustration purposes only
+pmml.string <- ToPmml(model.def, variable.def)
+
+# Upload model to Causata.
+# The parameters below are for illustration only.
+causata.config <- CausataConfig(
+  config.server.host = "123.456.789.10",
+  config.server.port = 8002,
+  config.username = "testuser",
+  cinfig.password = "1234abcd")
+@
+
+The UploadModel command requires a connection to a Causata server.  The command creates a new 
+variable in Causata that is available immediately for scoring.
+
+<<eval=FALSE>>=  
+result <- UploadModel(causata.config, model.def, variable.def)
+@
+
+The model coefficients exported to Causata will match the set obtained from the \texttt{cv.glmnet} object.  
+This code extracts the nonzero coefficients.
+
+<<>>=
+# extract nonzero coefficients
+coefs.all <- as.matrix(coef(cv.glmnet.obj, s="lambda.min"))
+idx <- as.vector(abs(coefs.all) > 0)
+coefs.nonzero <- as.matrix(coefs.all[idx])
+rownames(coefs.nonzero) <- rownames(coefs.all)[idx]
+@
+
+The model coefficients are printed below.
+
+<<size="tiny">>=
+print(coefs.nonzero)
+@
+
+\end{document}

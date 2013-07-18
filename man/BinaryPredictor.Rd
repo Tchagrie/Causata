@@ -45,8 +45,10 @@ and factor columns.
   be provided in \code{civ} so that linearity can be computed.  See \code{Woe} for more information.}
   \item{copy.data}{Reserved for future use, indicates if the data should be copied.}
   \item{name}{The variable name.  If NULL it will be extracted from the deparsed input \code{iv}.}
-  \item{\dots }{Extra arguments are passed to \code{PredictivePowerCv}.  If \code{iv} is numeric
-  then extra arguments are also passed to \code{BinaryCut}.}
+  \item{\dots }{For the \code{BinaryPredictor} functions 
+  the extra arguments are passed to \code{PredictivePowerCv}.  If \code{iv} is numeric
+  then extra arguments are also passed to \code{BinaryCut}.  For \code{plot} the extra arguments
+  are passed to \code{ShortenStrings}, which is used to shorten the names of factor levels in plots.}
   \item{verbose}{If true then calculation information is printed.}
   \item{x}{Output from one of the \code{BinaryPredictor} functions.}
   \item{y}{Unused argument for the generic \code{plot} function.}
@@ -92,7 +94,8 @@ the BinaryPredictor output.  The values include the variable name, predictive po
 Justin Hemann <support@causata.com>
 }
 \seealso{
-\code{\link{PredictivePowerCv}, \link{BinaryCut}, \link{MergeLevels}, \link{Woe}.}
+\code{\link{PredictivePowerCv}, \link{BinaryCut}, \link{MergeLevels}, \link{Woe}, 
+\link{ShortenStrings}.}
 }
 \examples{
 library(ggplot2)
